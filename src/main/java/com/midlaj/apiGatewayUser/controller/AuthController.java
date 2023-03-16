@@ -1,38 +1,19 @@
 package com.midlaj.apiGatewayUser.controller;
 
-import com.midlaj.apiGatewayUser.exception.BadRequestException;
-import com.midlaj.apiGatewayUser.model.AuthProvider;
-import com.midlaj.apiGatewayUser.model.Role;
-import com.midlaj.apiGatewayUser.model.User;
-import com.midlaj.apiGatewayUser.payload.ApiResponse;
-import com.midlaj.apiGatewayUser.payload.AuthResponse;
+import com.midlaj.apiGatewayUser.dto.request.PasswordResetDTO;
 import com.midlaj.apiGatewayUser.payload.LoginRequest;
 import com.midlaj.apiGatewayUser.payload.SignUpRequest;
-import com.midlaj.apiGatewayUser.repository.RoleRepository;
-import com.midlaj.apiGatewayUser.repository.UserRepository;
-import com.midlaj.apiGatewayUser.security.TokenProvider;
-import com.midlaj.apiGatewayUser.security.UserPrincipal;
 import com.midlaj.apiGatewayUser.service.AuthenticationService;
 import com.midlaj.apiGatewayUser.service.UserServiceImpl;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.net.URISyntaxException;
+import java.text.ParseException;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -55,8 +36,29 @@ public class AuthController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) throws URISyntaxException {
 
         return userService.saveUser(signUpRequest);
+    }
+
+    @GetMapping("/verify")
+    public ResponseEntity<?> verifyUser(@Param("verificationCode") String verificationCode) {
+        log.info("Inside the verifyUser method in Auth Controller");
+
+        return userService.verifyUser(verificationCode);
+    }
+
+    @GetMapping("/forget")
+    public ResponseEntity<?> forgetPassword(@Param("email") String email) throws URISyntaxException {
+        log.info("Inside the forgetPassword method in Auth Controller");
+
+        return userService.handleForgetPassword(email);
+    }
+
+    @PostMapping("/forget")
+    public ResponseEntity<?> resetPassword(@RequestBody @Valid PasswordResetDTO passwordResetDTO) {
+        log.info("Inside the resetPassword method in Auth Controller");
+
+        return userService.changePasswordWithResetCode(passwordResetDTO);
     }
 }

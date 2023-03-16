@@ -53,10 +53,10 @@ public class User {
     @Column(name = "phone", length = 32)
     private String phone;
 
-    @Column(name = "reset_password_token", length = 30)
+    @Column(name = "reset_password_token", length = 128)
     private String resetPasswordToken;
 
-    @Column(name = "verification_code",length = 64)
+    @Column(name = "verification_code",length = 128)
     private String verificationCode;
 
     @ManyToMany(fetch = FetchType.EAGER)

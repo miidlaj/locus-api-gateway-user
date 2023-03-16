@@ -5,6 +5,7 @@ import com.midlaj.apiGatewayUser.model.User;
 import com.midlaj.apiGatewayUser.repository.UserRepository;
 import com.midlaj.apiGatewayUser.security.CurrentUser;
 import com.midlaj.apiGatewayUser.security.UserPrincipal;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @GetMapping("/user/me")
     @PreAuthorize("hasRole('ROLE_USER')")

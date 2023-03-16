@@ -2,8 +2,6 @@ package com.midlaj.apiGatewayUser.service;
 
 import com.midlaj.apiGatewayUser.payload.AuthResponse;
 import com.midlaj.apiGatewayUser.payload.LoginRequest;
-import com.midlaj.apiGatewayUser.repository.RoleRepository;
-import com.midlaj.apiGatewayUser.repository.UserRepository;
 import com.midlaj.apiGatewayUser.security.TokenProvider;
 import com.midlaj.apiGatewayUser.security.UserPrincipal;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +14,6 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -49,10 +46,6 @@ public class AuthenticationServiceImpl implements AuthenticationService{
             return new ResponseEntity<>("Bad Credentials", HttpStatus.LOCKED);
         }
 
-        if (authentication == null) {
-
-        }
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
@@ -65,6 +58,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
                 .name(userPrincipal.getName())
                 .phone(userPrincipal.getPhone())
                 .jwtToken(jwt)
+                .id(String.valueOf(userPrincipal.getId()))
                 .build());
     }
 }
