@@ -1,10 +1,10 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
+    username: admin
     #url: jdbc:mysql://localhost:3306/api-gateway-user
     url: jdbc:mysql://database-1.crttgwzqvw36.ap-south-1.rds.amazonaws.com:3306/api-gateway-user
-    password: '1234'
+    password: 12345678
   main:
     allow-circular-references: 'true'
     allow-bean-definition-overriding: true
